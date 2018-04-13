@@ -46,8 +46,7 @@ public class PlantWidgetProvider extends AppWidgetProvider {
 
 
 
-        // TODO (4): Create a PendingIntent for the PlantWateringService and setOnClickPendingIntent for widget_water_button
-        // Instruct the widget manager to update the widget
+
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 

@@ -30,13 +30,18 @@ public class PlantWateringService extends IntentService {
     private void handleActionWaterPlants() {
         Uri PLANTS_URI = PlantContract.BASE_CONTENT_URI.buildUpon().appendPath(PlantContract.PATH_PLANTS).build();
         ContentValues contentValues = new ContentValues();
-        long timenow = System.currentTimeMillis();
-        contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME,timenow);
-        String selectionCriteria = ">? ";
-        String [] selectionArgs = new String [] {String.valueOf(timenow- PlantUtils.MAX_AGE_WITHOUT_WATER)};
+        long timeNow = System.currentTimeMillis();
+        contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME,timeNow);
+        String selectionCriteria = PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME+">?";
+        String [] selectionArgs = new String [] {String.valueOf(timeNow- PlantUtils.MAX_AGE_WITHOUT_WATER)};
 
-        getContentResolver().update(PLANTS_URI,contentValues,selectionCriteria,selectionArgs);
+//        getContentResolver().update(PLANTS_URI,contentValues,selectionCriteria,selectionArgs);
 
+        getContentResolver().update(
+                              PLANTS_URI,
+                               contentValues,
+                                PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME+">?",
+                               new String[]{String.valueOf(timeNow - PlantUtils.MAX_AGE_WITHOUT_WATER)});
 
 
     }
