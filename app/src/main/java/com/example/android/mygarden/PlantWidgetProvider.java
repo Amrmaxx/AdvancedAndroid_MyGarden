@@ -40,7 +40,7 @@ public class PlantWidgetProvider extends AppWidgetProvider {
 
         Intent waterIntent = new Intent (context,PlantWateringService.class);
         waterIntent.setAction(PlantWateringService.ACTION_WATER_PLANTS);
-        PendingIntent wateringPendingIntent = PendingIntent.getService(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent wateringPendingIntent = PendingIntent.getService(context,0,waterIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         views.setOnClickPendingIntent(R.id.widget_water_button,wateringPendingIntent);
 
@@ -48,6 +48,8 @@ public class PlantWidgetProvider extends AppWidgetProvider {
 
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
+
+
     }
 
     @Override
