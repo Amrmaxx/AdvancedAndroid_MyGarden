@@ -41,14 +41,14 @@ public class PlantWateringService extends IntentService {
 
     public static final String ACTION_WATER_PLANT = "com.example.android.mygarden.action.water_plant";
     public static final String ACTION_UPDATE_PLANT_WIDGETS = "com.example.android.mygarden.action.update_plant_widgets";
-    public static final String EXTRA_PLANT_ID = "com.example.android.mygarden.extra.PLANT_ID";
+    public static final String EXTRA_PLANT_ID = "com.example.android.mygarden.extra.PLANT_ID";;
 
     public PlantWateringService() {
         super("PlantWateringService");
     }
 
     /**
-     * Starts this service to perform WaterPlants action with the given parameters. If
+     * Starts this service to perform WaterPlant action with the given parameters. If
      * the service is already performing a task this action will be queued.
      *
      * @see IntentService
@@ -99,12 +99,13 @@ public class PlantWateringService extends IntentService {
         ContentValues contentValues = new ContentValues();
         long timeNow = System.currentTimeMillis();
         contentValues.put(PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME, timeNow);
-        // Update only plants that are still alive
+        // Update only if that plant is still alive
         getContentResolver().update(
                 SINGLE_PLANT_URI,
                 contentValues,
                 PlantContract.PlantEntry.COLUMN_LAST_WATERED_TIME + ">?",
                 new String[]{String.valueOf(timeNow - PlantUtils.MAX_AGE_WITHOUT_WATER)});
+        // Always update widgets after watering plants
         startActionUpdatePlantWidgets(this);
     }
 
@@ -124,7 +125,7 @@ public class PlantWateringService extends IntentService {
         );
         // Extract the plant details
         int imgRes = R.drawable.grass; // Default image in case our garden is empty
-        boolean canWater = false;
+        boolean canWater = false; // Default to hide the water drop button
         long plantId = INVALID_PLANT_ID;
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();

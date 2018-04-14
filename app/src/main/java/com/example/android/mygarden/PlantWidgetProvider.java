@@ -21,6 +21,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -39,19 +40,19 @@ public class PlantWidgetProvider extends AppWidgetProvider {
         Intent intent;
         if (plantId == PlantContract.INVALID_PLANT_ID) {
             intent = new Intent(context, MainActivity.class);
-        } else {// Set on click to open the corresponding detail activity
-
+        } else { // Set on click to open the corresponding detail activity
+            Log.d(PlantWidgetProvider.class.getSimpleName(), "plantId=" + plantId);
             intent = new Intent(context, PlantDetailActivity.class);
-            intent.putExtra(PlantWateringService.EXTRA_PLANT_ID, plantId);
+            intent.putExtra(PlantDetailActivity.EXTRA_PLANT_ID, plantId);
         }
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.plant_widget);
         // Update image
         views.setImageViewResource(R.id.widget_plant_image, imgRes);
-
+        // Update plant ID text
         views.setTextViewText(R.id.widget_plant_name, String.valueOf(plantId));
-
+        // Show/Hide the water drop button
         if (showWater) views.setViewVisibility(R.id.widget_water_button, View.VISIBLE);
         else views.setViewVisibility(R.id.widget_water_button, View.INVISIBLE);
         // Widgets allow click handlers to only launch pending intents
@@ -72,8 +73,6 @@ public class PlantWidgetProvider extends AppWidgetProvider {
         PlantWateringService.startActionUpdatePlantWidgets(context);
     }
 
-
-    // to show/hide the water button
     public static void updatePlantWidgets(Context context, AppWidgetManager appWidgetManager,
                                           int imgRes, long plantId, boolean showWater, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {

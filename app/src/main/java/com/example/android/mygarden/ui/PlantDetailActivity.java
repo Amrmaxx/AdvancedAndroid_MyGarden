@@ -58,7 +58,6 @@ public class PlantDetailActivity extends AppCompatActivity
 
     public void onWaterButtonClick(View view) {
         PlantWateringService.startActionWaterPlant(this, mPlantId);
-
     }
 
     @Override
